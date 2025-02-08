@@ -8,10 +8,6 @@ public class Main {
     private static final String MARK = "mark";
     private static final String LIST ="list";
     private static final String EXIT = "exit";
-    private static Task[] done;
-
-    public static int id = 1;
-    public static Task[] array = new Task[10];
 
     public static void main(String[] args){
 
@@ -21,6 +17,49 @@ public class Main {
         do {
             readCommand(o1, in);
         } while(!readCommand(o1, in).equals(EXIT));
+    }
+
+    private static String readCommand(Organizer o1, Scanner in){
+        String input = in.nextLine();
+        switch(command(input)){
+            case ADD:
+                o1.addTask(description(input));
+                break;
+            case UPDATE:
+                break;
+            case DELETE:
+                o1.deleteTask(description(input));
+                break;
+            case MARK:
+                if(o1.markStatus(description(input))){
+                    o1.markStatus(description(input));
+                }else {
+                    System.out.println("invalid input");
+                }
+                break;
+            case LIST:
+                switch(description(input)){
+                    case LIST:
+                        o1.listAllTasks();
+                        break;
+                    case "done":
+                        listDone(o1);
+                        break;
+                    case "todo":
+                        o1.listTodoTasks();
+                        break;
+                    case "in-progress":
+                        o1.listInProgressTasks();
+                        break;
+                }
+            case EXIT:
+                break;
+
+            default:
+                System.out.println("invalid command");
+                break;
+        }
+        return command(input);
     }
 
     public static String command(String input){
@@ -39,52 +78,11 @@ public class Main {
         return description;
     }
 
-    private static void listDone(Organizer o1, Task[] done){
-        done = o1.listDoneTasks();
-        for (int i = 0; i < done.length; i++){
-            System.out.println(done[i].getDescription());
+    private static void listDone(Organizer o1){
+        Task[] done = o1.listDoneTasks();
+        System.out.println("Id  | Status     | Description        | Created     | Update    ");
+        for (Task task : done) {
+            System.out.println(task.getId() + "   | " + task.getStatus() + "       | " + task.getDescription() + "          ");
         }
-    }
-
-    private static String readCommand(Organizer o1, Scanner in){
-        String input = in.nextLine();
-        switch(command(input)){
-            case ADD:
-                o1.addTask(description(input));
-                break;
-            case UPDATE:
-                break;
-            case DELETE:
-                break;
-            case MARK:
-                if(o1.markStatus(description(input)) == true){
-                    o1.markStatus(description(input));
-                }else {
-                    System.out.println("invalid input");
-                }
-                break;
-            case LIST:
-                switch(description(input)){
-                    case LIST:
-                        o1.listAllTasks();
-                        break;
-                    case "done":
-                        listDone(o1, done);
-                        break;
-                    case "todo":
-                        o1.listTodoTasks();
-                        break;
-                    case "in-progress":
-                        o1.listInProgressTasks();
-                        break;
-                }
-            case EXIT:
-                break;
-
-            default:
-                System.out.println("invalid command");
-                break;
-        }
-        return command(input);
     }
 }

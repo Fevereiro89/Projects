@@ -76,9 +76,27 @@ public class Organizer {
 
     public void listInProgressTasks() {
         for (int i = 0; i < array.length; i++) {
-            if (array[i].getStatus() == "in-progress" && array[i] != null) {
+            if (array[i].getStatus().equals("in-progress") && array[i] != null) {
                 System.out.println(array[i].getDescription());
             } else {
+                break;
+            }
+        }
+    }
+
+    public void deleteTask(String id){
+        int idInt = Integer.valueOf(id);
+        for(int i = 0; i < array.length; i++){
+            if(idInt == array[i].getId()){
+                array[i] = null;
+                for(int j = i; j < array.length; j++){
+                    if(array[j+1] != null){
+                        array[j] = array[j+1];
+                    } else {
+                        array[j] = null;
+                        break;
+                    }
+                }
                 break;
             }
         }
